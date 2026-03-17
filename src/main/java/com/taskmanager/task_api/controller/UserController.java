@@ -1,11 +1,14 @@
 package com.taskmanager.task_api.controller;
 
 
+import com.taskmanager.task_api.dto.UserCreateDTO;
+import com.taskmanager.task_api.dto.UserResponseDTO;
 import com.taskmanager.task_api.model.User;
 import com.taskmanager.task_api.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 /**
  * REST Controller for user operations.
  */
@@ -27,8 +30,8 @@ public class UserController {
      * POST /users
      */
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public UserResponseDTO createUser(@RequestBody UserCreateDTO userDTO) {
+        return userService.createUser(userDTO);
     }
 
     /**
@@ -36,7 +39,7 @@ public class UserController {
      * GET /users
      */
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return userService.getUsers();
     }
 }
