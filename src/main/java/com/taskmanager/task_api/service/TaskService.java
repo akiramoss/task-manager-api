@@ -2,6 +2,7 @@ package com.taskmanager.task_api.service;
 
 import com.taskmanager.task_api.dto.TaskCreateDTO;
 import com.taskmanager.task_api.dto.TaskResponseDTO;
+import com.taskmanager.task_api.exception.ResourceNotFoundException;
 import com.taskmanager.task_api.model.User;
 import com.taskmanager.task_api.model.Task;
 import com.taskmanager.task_api.repository.UserRepository;
@@ -30,7 +31,7 @@ public class TaskService {
     public TaskResponseDTO createTask(TaskCreateDTO taskDTO) {
 
         User user = userRepository.findById(taskDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Task task = new Task();
         task.setTitle(taskDTO.getTitle());

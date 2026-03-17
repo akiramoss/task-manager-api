@@ -5,6 +5,7 @@ import com.taskmanager.task_api.dto.UserCreateDTO;
 import com.taskmanager.task_api.dto.UserResponseDTO;
 import com.taskmanager.task_api.model.User;
 import com.taskmanager.task_api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class UserController {
      * POST /users
      */
     @PostMapping
-    public UserResponseDTO createUser(@RequestBody UserCreateDTO userDTO) {
+    public UserResponseDTO createUser(@RequestBody @Valid UserCreateDTO userDTO) {
         return userService.createUser(userDTO);
     }
 

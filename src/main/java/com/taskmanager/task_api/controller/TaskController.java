@@ -3,6 +3,7 @@ package com.taskmanager.task_api.controller;
 import com.taskmanager.task_api.dto.TaskCreateDTO;
 import com.taskmanager.task_api.dto.TaskResponseDTO;
 import com.taskmanager.task_api.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class TaskController {
      * POST /tasks?userId=1
      */
     @PostMapping
-    public TaskResponseDTO createTask(@RequestBody TaskCreateDTO taskDTO) {
+    public TaskResponseDTO createTask(@RequestBody @Valid TaskCreateDTO taskDTO) {
         return taskService.createTask(taskDTO);
     }
 
