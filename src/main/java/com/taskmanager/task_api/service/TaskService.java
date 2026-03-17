@@ -1,5 +1,7 @@
 package com.taskmanager.task_api.service;
 
+import com.taskmanager.task_api.dto.TaskCreateDTO;
+import com.taskmanager.task_api.dto.TaskResponseDTO;
 import com.taskmanager.task_api.model.User;
 import com.taskmanager.task_api.model.Task;
 import com.taskmanager.task_api.repository.UserRepository;
@@ -25,18 +27,44 @@ public class TaskService {
     /**
      * Create a task for a specific user.
      */
-    public Task createTask(Long userId, Task task) {
+    public TaskResponseDTO createTask(TaskCreateDTO taskDTO) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(taskDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Task task = new Task();
+        task.setTitle(taskDTO.getTitle());
+        task.setDescription(taskDTO.getDescription());
+        task.setCompleted(taskDTO.isCompleted());
         task.setUser(user);
 
-        return taskRepository.save(task);
+        Task saved = taskRepository.save(task);
+
+        TaskResponseDTO responseDTO = new TaskResponseDTO();
+        responseDTO.setId(saved.getId());
+        responseDTO.setTitle(saved.getTitle());
+        responseDTO.setDescription(saved.getDescription());
+        responseDTO.setCompleted(saved.isCompleted());
+        responseDTO.setUserId(saved.getUser().getId());
+
+        return responseDTO;
     }
 
     /**
      * Retrieve all tasks.
      */
-    public List<Task> getTasks() {
-        return taskRepository.findAll();
+    public List<TaskResponseDTO> getTasks() {
+        return taskRepository.findAll()
+                .stream()
+                .map(task -> {
+                    TaskResponseDTO responseDTO = new TaskResponseDTO();
+                    responseDTO.setId(task.getId());
+                    responseDTO.setTitle(task.getTitle());
+                    responseDTO.setDescription(task.getDescription());
+                    responseDTO.setCompleted(task.isCompleted());
+                    responseDTO.setUserId(task.getUser().getId());
+                    return responseDTO;
+                })
+                .toList();
     }
 }

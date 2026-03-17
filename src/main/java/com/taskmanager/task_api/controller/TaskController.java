@@ -1,6 +1,7 @@
 package com.taskmanager.task_api.controller;
 
-import com.taskmanager.task_api.model.Task;
+import com.taskmanager.task_api.dto.TaskCreateDTO;
+import com.taskmanager.task_api.dto.TaskResponseDTO;
 import com.taskmanager.task_api.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +25,8 @@ public class TaskController {
      * POST /tasks?userId=1
      */
     @PostMapping
-    public Task createTask(
-            @RequestParam Long userId,
-            @RequestBody Task task
-    ) {
-        return taskService.createTask(userId, task);
+    public TaskResponseDTO createTask(@RequestBody TaskCreateDTO taskDTO) {
+        return taskService.createTask(taskDTO);
     }
 
     /**
@@ -36,7 +34,7 @@ public class TaskController {
      * GET /tasks
      */
     @GetMapping
-    public List<Task> getTasks() {
+    public List<TaskResponseDTO> getTasks() {
         return taskService.getTasks();
     }
 }
