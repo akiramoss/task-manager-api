@@ -13,7 +13,6 @@ public interface TaskMapper {
      * DTO → Entity
      */
     @Mapping(target = "user", ignore = true)
-    // 👈 importante
     Task toEntity(TaskCreateDTO dto);
 
     /**
