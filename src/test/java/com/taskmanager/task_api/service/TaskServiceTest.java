@@ -10,6 +10,7 @@ import com.taskmanager.task_api.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,5 +75,52 @@ class TaskServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> service.createTask(dto));
+    }
+
+    @Test
+    void shouldReturnListOfTasks() {
+
+        TaskRepository taskRepository = Mockito.mock(TaskRepository.class);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        TaskMapper taskMapper = Mockito.mock(TaskMapper.class);
+
+        TaskService service = new TaskService(taskRepository, userRepository, taskMapper);
+
+        // Mock data
+        Task task = new Task();
+        task.setTitle("Task 1");
+
+        Mockito.when(taskRepository.findAll())
+                .thenReturn(List.of(task));
+
+        TaskResponseDTO dto = new TaskResponseDTO();
+        dto.setTitle("Task 1");
+
+        Mockito.when(taskMapper.toDTO(task)).thenReturn(dto);
+
+        // Execute
+        List<TaskResponseDTO> result = service.getTasks();
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals("Task 1", result.get(0).getTitle());
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoTasks() {
+
+        TaskRepository taskRepository = Mockito.mock(TaskRepository.class);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        TaskMapper taskMapper = Mockito.mock(TaskMapper.class);
+
+        TaskService service = new TaskService(taskRepository, userRepository, taskMapper);
+
+        Mockito.when(taskRepository.findAll())
+                .thenReturn(List.of());
+
+        List<TaskResponseDTO> result = service.getTasks();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 }
