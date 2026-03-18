@@ -25,9 +25,6 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * Create a task for a specific user.
-     */
     public TaskResponseDTO createTask(TaskCreateDTO taskDTO) {
 
         User user = userRepository.findById(taskDTO.getUserId())
